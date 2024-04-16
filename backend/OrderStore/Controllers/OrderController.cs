@@ -66,7 +66,7 @@ public class OrderController : ControllerBase
             request.name,
             request.userId,
             (int) Status.Created,
-            DateTime.Now,
+            DateTime.UtcNow,
             string.Empty,
             request.fileId
             );
@@ -128,7 +128,7 @@ public class OrderController : ControllerBase
         await _ordersService.UpdateOrder(order with 
         {
             Status = (int)Status.Sent,
-            EditDate = DateTime.Now,
+            EditDate = DateTime.UtcNow,
         });
 
         return Ok();

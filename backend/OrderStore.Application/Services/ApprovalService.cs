@@ -25,7 +25,7 @@ public class ApprovalService // : IApprovalService
         var result = await _repository.Update(order with 
         {
             Status = (int)Status.Sent,
-            EditDate = DateTime.Now,
+            EditDate = DateTime.UtcNow,
         });
 
         return result.ToString();
