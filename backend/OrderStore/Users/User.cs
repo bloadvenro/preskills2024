@@ -1,5 +1,3 @@
-using System.Reflection.Metadata;
-
 namespace OrderStore.Users;
 
 public class User
@@ -22,23 +20,30 @@ public static class Users
     {
         new User()
         {
-            Login = "Inspector",
+            Login = "Inspector0",
             Password = "Inspector00",
             Id = "1000",
             Role = "inspector"
         },
         new User()
         {
+            Login = "Inspector1",
+            Password = "Inspector01",
+            Id = "1001",
+            Role = "inspector"
+        },
+        new User()
+        {
             Login = "Scientist1",
             Password = "Scientist01",
-            Id = "1001",
+            Id = "2001",
             Role = "scientist"
         },
         new User()
         {
             Login = "Scientist2",
             Password = "Scientist02",
-            Id = "1002",
+            Id = "2002",
             Role = "scientist"
         }
     };
