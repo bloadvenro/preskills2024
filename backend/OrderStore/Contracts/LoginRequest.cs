@@ -1,3 +1,3 @@
 namespace OrderStore.Contracts;
 
-public record LoginRequest(string login, string password);
+public record LoginRequest(string username, string password);
