@@ -11,13 +11,13 @@ COPY ["OrderStore/OrderStore.csproj", "OrderStore/"]
 RUN dotnet restore "OrderStore/OrderStore.csproj"
 COPY . .
 # WORKDIR "/OrderStore"
-RUN dotnet build "./OrderStore/OrderStore.csproj" -c $BUILD_CONFIGURATION -o /app/build
+RUN dotnet build "./OrderStore/OrderStore.csproj" -c Release -o ./app/build
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "/OrderStore/OrderStore.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./OrderStore/OrderStore.csproj" -c Release -o ./app/publish /p:UseAppHost=false
 
 FROM base AS final
-WORKDIR /app
-COPY --from=publish /app/publish .
+WORKDIR ./app
+COPY --from=publish ./app/publish .
 ENTRYPOINT ["dotnet", "OrderStore.dll"]
