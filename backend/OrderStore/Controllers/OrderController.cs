@@ -25,12 +25,17 @@ public class OrderController : ControllerBase
     [HttpGet("GetAll/{userId}")]
     public async Task<ActionResult<List<Order>>> GetAll(string userId)
     {
-        var user = Users.Users.GetUser(userId);
+        if (CheckUser(userId, Users.User.InspectorRole))
+        {
+            return await _ordersService.GetAll();
+        }
 
-        if (user != null)
-            return await _ordersService.GetAllOrders(user.Id, user.Role);
+        if (CheckUser(userId, Users.User.ScientistRole))
+        {
+            return await _ordersService.GetAllByUser(userId);
+        }
 
-        return new List<Order>();
+        return BadRequest("Bad user");
     }
     
     [HttpGet("Get/{id:guid}")]

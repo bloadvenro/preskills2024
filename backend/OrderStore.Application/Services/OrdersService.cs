@@ -14,19 +14,18 @@ public class OrdersService : IOrdersService
         _repository = repository;
     }
 
-    public async Task<List<Order>> GetAllOrders(string userId, string role)
+    public async Task<List<Order>> GetAll()
     {
-        var orders = await _repository.Get();
+        return await _repository.Get();
+    }
 
-        if (role == "inspector")
-            return orders;
-        
-        var filterOrders = orders
+    public async Task<List<Order>> GetAllByUser(string userId)
+    {
+        return (await _repository.Get())
             .Where(x => x.UserId == userId)
             .ToList();
-        return filterOrders;
     }
-    
+
     public async Task<Order?> Get(Guid id)
     {
         var orders = await _repository.Get();
