@@ -5,18 +5,28 @@ namespace OrderStore.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class LoginController : ControllerBase
+public class AuthController : ControllerBase
 {
-    public LoginController()
+    public AuthController()
     {
-        
     }
 
-    [HttpPost]
-    public Task<ActionResult<LoginResponse>> Login(LoginRequest request)
+    [HttpPost("login")]
+    public Task<ActionResult<LoginResponse>> Login([FromBody] LoginRequest request)
     {
-        var user = Users.Users.SystemUsers.FirstOrDefault(x => x.Login == request.login && x.Password == request.login);
-        
+        var user = Users.Users.SystemUsers.FirstOrDefault(x => x.Login == request.login && x.Password == request.password);
+
+        if (user == null)
+        {
+            return Task.FromResult<ActionResult<LoginResponse>>(Unauthorized());
+        }
+
         return Task.FromResult<ActionResult<LoginResponse>>(Ok(new LoginResponse(user.Id, user.Role)));
+    }
+
+    [HttpPost("logout")]
+    public Task<ActionResult<string>> Logout()
+    {
+        return Task.FromResult<ActionResult<string>>(Ok("OK"));
     }
 }
