@@ -38,4 +38,8 @@ app.UseCors(x =>
     x.WithMethods().AllowAnyMethod();
 });
 
+// throw new Exception($"DT: {builder.Configuration.GetConnectionString(nameof(OrderStoreDbContext))}");
+
+
 app.Run();
+
