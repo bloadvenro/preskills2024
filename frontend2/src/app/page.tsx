@@ -1,9 +1,8 @@
-import Reports from "./reports";
+import { NextPage } from "next";
+import SignInForm from "./form";
 
-export default function Page() {
-  return (
-    <main className="p-24">
-      <Reports />
-    </main>
-  );
-}
+const LoginPage: NextPage = () => {
+  return <SignInForm />;
+};
+
+export default LoginPage;
