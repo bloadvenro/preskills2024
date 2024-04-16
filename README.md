@@ -1,5 +1,14 @@
 
 ### RUN
+
+> apt-get install dotnet
+
+> apt-get install docker
+
+> git clone git@github.com:bloadvenro/preskills2024.git
+
+> cd preskills2024
+
 > docker compose up
 
 > http://localhost:3000
