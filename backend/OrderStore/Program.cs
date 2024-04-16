@@ -4,6 +4,7 @@ using OrderStore.Core.Abstractions;
 using OrderStore.DataAccess;
 using OrderStore.DataAccess.Repositories;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
@@ -19,6 +20,22 @@ builder.Services.AddScoped<IOrdersRepository, OrdersRepository>();
 
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+
+    var context = services.GetRequiredService<OrderStoreDbContext>();
+    context.Database.Migrate();
+}
+
+
+app.UseCors(x =>
+{
+    x.WithHeaders().AllowAnyHeader();
+    x.WithOrigins("http://localhost:3000");
+    x.WithMethods().AllowAnyMethod();
+});
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -30,16 +47,6 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 
 app.MapControllers();
-
-app.UseCors(x =>
-{
-    x.WithHeaders().AllowAnyHeader();
-    x.WithOrigins("http://localhost:3000");
-    x.WithMethods().AllowAnyMethod();
-});
-
-// throw new Exception($"DT: {builder.Configuration.GetConnectionString(nameof(OrderStoreDbContext))}");
-
 
 app.Run();
 
