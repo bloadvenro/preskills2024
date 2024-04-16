@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using OrderStore.Contracts;
 using OrderStore.Core.Abstractions;
 using OrderStore.Core.Models;
 
@@ -21,9 +22,41 @@ public class OrderController : ControllerBase
         return Ok("test");
     }
 
-    [HttpGet]
-    public async Task<ActionResult<List<Order>>> Get()
+    [HttpGet("GetAll")]
+    public async Task<ActionResult<List<Order>>> GetAll()
     {
         return await _ordersService.GetAllOrders();
+    }
+    
+    [HttpGet("Get")]
+    public async Task<ActionResult<Order>> Get([FromBody] Guid id)
+    {
+        return await _ordersService.Get(id);
+    }
+
+    [HttpPut("Update")]
+    public async Task<ActionResult<Guid>> Update([FromBody] Guid id, OrderRequest request)
+    {
+        var result = await _ordersService.UpdateOrder(id, request.Name, request.UserId, request.Status, request.EditDate,
+            request.Comment, request.FileId);
+
+        return Ok(result);
+    }
+
+    [HttpPost("Create")]
+    public async Task<ActionResult<Guid>> Create(OrderRequest request)
+    {
+        var order = Order.Create(
+            Guid.NewGuid(),
+            request.Name,
+            request.UserId,
+            request.Status,
+            request.EditDate,
+            request.Comment,
+            request.FileId
+            );
+
+        var result = await _ordersService.CreateOrder(order.Order!);
+        return Ok(result);
     }
 }
