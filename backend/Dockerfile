@@ -1,23 +1,15 @@
-﻿FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-USER $APP_UID
+﻿FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-env
 WORKDIR /app
-EXPOSE 8080
-EXPOSE 8081
 
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-ARG BUILD_CONFIGURATION=Release
-WORKDIR /src
-COPY ["OrderStore/OrderStore.csproj", "OrderStore/"]
-RUN dotnet restore "OrderStore/OrderStore.csproj"
-COPY . .
-# WORKDIR "/OrderStore"
-RUN dotnet build "./OrderStore/OrderStore.csproj" -c Release -o ./app/build
+# Copy everything
+COPY . ./
+# Restore as distinct layers
+RUN dotnet restore ./OrderStore/OrderStore.csproj
+# Build and publish a release
+RUN dotnet publish ./OrderStore/OrderStore.csproj -c Release -o out
 
-FROM build AS publish
-ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./OrderStore/OrderStore.csproj" -c Release -o ./app/publish /p:UseAppHost=false
-
-FROM base AS final
-WORKDIR ./app
-COPY --from=publish ./app/publish .
+# Build runtime image
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
+WORKDIR /app
+COPY --from=build-env /app/out .
 ENTRYPOINT ["dotnet", "OrderStore.dll"]
