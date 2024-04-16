@@ -1,8 +1,16 @@
+using Microsoft.EntityFrameworkCore;
+using OrderStore.DataAccess;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddDbContext<OrderStoreDbContext>(
+    options =>
+    {
+        options.UseNpgsql(builder.Configuration.GetConnectionString(nameof(OrderStoreDbContext)));
+    });
 
 var app = builder.Build();
 
