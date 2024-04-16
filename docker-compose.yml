@@ -22,6 +22,13 @@ services:
     environment:
         ConnectionString: 'Host=postgres;Port=5432;CommandTimeout=300;Database=db;User Id=postgres;Password=123;'
 
+  frontend:
+    build: frontend2/.
+    container_name: frontend 
+    # depends_on:
+    #   - backend
+    ports:
+      - '3000:3000'
 
 volumes:
   postgres-data:
