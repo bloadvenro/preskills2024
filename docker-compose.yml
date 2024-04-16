@@ -12,5 +12,18 @@ services:
     ports:
       - "5432:5432"
 
+  backend:
+    build: backend/.
+    depends_on:
+      - db
+    ports:git st
+    
+      - '5002:80'
+    environment:
+      ConnectionString: 'Host=db;Port=5432;CommandTimeout=300;Database=teamGatherer_db;User Id=username;Password=password;'
+
+
 volumes:
   postgres-data:
+
+  
