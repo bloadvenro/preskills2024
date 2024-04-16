@@ -44,14 +44,14 @@ public class OrderController : ControllerBase
         return result;
     }
 
-    [HttpPut("Update/{id:guid}")]
-    public async Task<ActionResult<Guid>> Update(Guid id, [FromBody] OrderRequest request)
-    {
-        var result = await _ordersService.UpdateOrder(id, request.Name, request.UserId, request.Status, request.EditDate,
-            request.Comment, request.FileId);
+    // [HttpPut("Update/{id:guid}")]
+    // public async Task<ActionResult<Guid>> Update(Guid id, [FromBody] OrderRequest request)
+    // {
+    //     var result = await _ordersService.UpdateOrder(id, request.Name, request.UserId, request.Status, request.EditDate,
+    //         request.Comment, request.FileId);
 
-        return Ok(result);
-    }
+    //     return Ok(result);
+    // }
 
     [HttpPost("Create")]
     public async Task<ActionResult<Guid>> Create([FromBody] OrderRequest request)
@@ -68,5 +68,30 @@ public class OrderController : ControllerBase
 
         var result = await _ordersService.CreateOrder(order.Order!);
         return Ok(result);
+    }
+
+    [HttpPost("EditOrder")]
+    public async Task<ActionResult<string>> EditOrder([FromBody] EditOrderRequest request)
+    {
+        var order = await _ordersService.Get(request.orderId);
+
+        if (order == null)
+        {
+            return BadRequest("No order");
+        }
+
+        if (order.Status != (int)Status.Created && order.Status != (int)Status.Rejected)
+        {
+            return BadRequest("Status");
+        }
+
+        await _ordersService.UpdateOrder(order with 
+        {
+            Name = request.name,
+            FileId = request.fileId,
+            Status = (int)Status.Created,
+        });
+
+        return Ok();
     }
 }

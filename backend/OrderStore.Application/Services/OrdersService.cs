@@ -38,9 +38,9 @@ public class OrdersService : IOrdersService
         return await _repository.Create(order);
     }
 
-    public async Task<Guid> UpdateOrder(Guid id, string name, string userId, int status, DateTime editDate, string comment, uint fileId)
+    public async Task<Guid> UpdateOrder(Order order)
     {
-        return await _repository.Update(id, name, userId, status, editDate, comment, fileId);
+        return await _repository.Update(order);
     }
 
     public async Task<Guid> DeleteOrder(Guid id)

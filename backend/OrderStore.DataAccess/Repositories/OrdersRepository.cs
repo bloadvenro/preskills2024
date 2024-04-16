@@ -46,19 +46,19 @@ public class OrdersRepository : IOrdersRepository
         return orderEntity.Id;
     }
 
-    public async Task<Guid> Update(Guid id, string name, string userId, int status, DateTime editDate, string comment, uint fileId)
+    public async Task<Guid> Update(Order order)
     {
         await _dbContext.Orders
-            .Where(x => x.Id == id)
+            .Where(x => x.Id == order.Id)
             .ExecuteUpdateAsync(x => x
-                .SetProperty(b => b.Name, b => name)
-                .SetProperty(b => b.UserId, b => userId)
-                .SetProperty(b => b.Status, b => status)
-                .SetProperty(b => b.EditDate, b => editDate)
-                .SetProperty(b => b.Comment, b => comment)
-                .SetProperty(b => b.FileId, b => fileId));
+                .SetProperty(b => b.Name, b => order.Name)
+                .SetProperty(b => b.UserId, b => order.UserId)
+                .SetProperty(b => b.Status, b => order.Status)
+                .SetProperty(b => b.EditDate, b => order.EditDate)
+                .SetProperty(b => b.Comment, b => order.Comment)
+                .SetProperty(b => b.FileId, b => order.FileId));
 
-        return id;
+        return order.Id;
     }
 
     public async Task<Guid> Delete(Guid id)

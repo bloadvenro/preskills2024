@@ -1,6 +1,6 @@
 namespace OrderStore.Core.Models;
 
-public class Order
+public record Order
 {
     private Order(Guid id, string name, string userId, int status, DateTime editDate, string comment, uint fileId)
     {
