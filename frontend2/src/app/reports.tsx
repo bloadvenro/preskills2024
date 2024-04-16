@@ -13,10 +13,10 @@ import {
 } from "@ant-design/icons";
 
 enum ReportStatus {
-  Created = "Created",
-  Approved = "Approved",
-  Rejected = "Rejected",
-  Sent = "Sent",
+  Created, // 0
+  Approved, // 1
+  Rejected, // 2
+  Sent, // 3
 }
 
 interface DataType {
@@ -63,12 +63,13 @@ const columns: TableColumnsType<DataType> = [
     defaultFilteredValue: [ReportStatus.Created, ReportStatus.Approved, ReportStatus.Rejected],
     filters: Array.from(new Set(data.map((record) => record.status))).map((status) => ({
       value: status,
-      text: status,
+      text: ReportStatus[status],
     })),
     filterMode: "tree",
     filterSearch: true,
     onFilter: (value, record) => record.status === value,
-    sorter: (a, b) => a.status.localeCompare(b.status),
+    render: (value) => ReportStatus[value],
+    sorter: (a, b) => a.status - b.status,
   },
   {
     title: "Actions",
