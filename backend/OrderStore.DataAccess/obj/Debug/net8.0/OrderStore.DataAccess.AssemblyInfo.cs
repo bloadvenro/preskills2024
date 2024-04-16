@@ -10,12 +10,12 @@
 using System;
 using System.Reflection;
 
-[assembly: System.Reflection.AssemblyCompanyAttribute("OrderStore")]
+[assembly: System.Reflection.AssemblyCompanyAttribute("OrderStore.DataAccess")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
 [assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+34a8e475e48d4aa348f35a9056450db367ab5d0f")]
-[assembly: System.Reflection.AssemblyProductAttribute("OrderStore")]
-[assembly: System.Reflection.AssemblyTitleAttribute("OrderStore")]
+[assembly: System.Reflection.AssemblyProductAttribute("OrderStore.DataAccess")]
+[assembly: System.Reflection.AssemblyTitleAttribute("OrderStore.DataAccess")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
 
 // Создано классом WriteCodeFragment MSBuild.
