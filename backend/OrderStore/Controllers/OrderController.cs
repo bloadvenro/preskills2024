@@ -25,7 +25,12 @@ public class OrderController : ControllerBase
     [HttpGet("GetAll/{userId}")]
     public async Task<ActionResult<List<Order>>> GetAll(string userId)
     {
-        return await _ordersService.GetAllOrders(userId);
+        var user = Users.Users.SystemUsers.FirstOrDefault(x => x.Id == userId);
+        
+        if (user != null)
+            return await _ordersService.GetAllOrders(user.Id, user.Role);
+
+        return new List<Order>();
     }
     
     [HttpGet("Get/{id:guid}")]
