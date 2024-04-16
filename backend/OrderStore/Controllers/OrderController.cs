@@ -56,14 +56,19 @@ public class OrderController : ControllerBase
     [HttpPost("Create")]
     public async Task<ActionResult<Guid>> Create([FromBody] CreateRequest request)
     {
+        if (!CheckUser(request.userId, Users.User.ScientistRole))
+        {
+            return BadRequest("Bad role");
+        }
+
         var order = Order.Create(
             Guid.NewGuid(),
-            request.Name,
-            request.UserId,
+            request.name,
+            request.userId,
             (int) Status.Created,
             DateTime.Now,
             string.Empty,
-            request.FileId
+            request.fileId
             );
 
         var result = await _ordersService.CreateOrder(order.Order!);
