@@ -109,7 +109,6 @@ export default function ReportForm() {
             </Form.Item>
 
             <Form.Item>
-              <SubmitButton />
               <div className="flex h-8 items-end space-x-1" aria-live="polite" aria-atomic="true">
                 {false && (
                   <>
@@ -118,6 +117,10 @@ export default function ReportForm() {
                   </>
                 )}
               </div>
+              <Space align="end">
+                <SubmitButton />
+                <CancelButton />
+              </Space>
             </Form.Item>
           </Space>
         </Form>
@@ -140,4 +143,8 @@ function SubmitButton() {
       Proceed
     </Button>
   );
+}
+
+function CancelButton() {
+  return <Button type="default">Cancel</Button>;
 }

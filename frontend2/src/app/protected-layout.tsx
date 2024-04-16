@@ -7,10 +7,12 @@ import Link from "next/link";
 
 const { Header, Content, Footer } = Layout;
 
-const items = new Array(3).fill(null).map((_, index) => ({
-  key: String(index + 1),
-  label: `nav ${index + 1}`,
-}));
+// const items = new Array(3).fill(null).map((_, index) => ({
+//   key: String(index + 1),
+//   label: `nav ${index + 1}`,
+// }));
+
+const items = [] as any[];
 
 const ProtectedLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const {
