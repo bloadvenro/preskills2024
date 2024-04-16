@@ -11,7 +11,30 @@ public class User
     public string Role { get; set; }
 }
 
-public class Users
+public static class Users
 {
-    public List<User> SystemUsers { get; set; }
+    public static List<User> SystemUsers = new List<User>()
+    {
+        new User()
+        {
+            Login = "Test",
+            Password = "Test",
+            Id = "id",
+            Role = "role"
+        },
+        new User()
+        {
+            Login = "",
+            Password = "",
+            Id = "",
+            Role = ""
+        },
+        new User()
+        {
+            Login = "",
+            Password = "",
+            Id = "",
+            Role = ""
+        }
+    };
 }
