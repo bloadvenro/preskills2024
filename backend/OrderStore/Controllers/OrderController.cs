@@ -80,9 +80,14 @@ public class OrderController : ControllerBase
             return BadRequest("No order");
         }
 
+        if (order.UserId != request.userId)
+        {
+            return BadRequest("Another user");
+        }
+
         if (order.Status != (int)Status.Created && order.Status != (int)Status.Rejected)
         {
-            return BadRequest("Status");
+            return BadRequest("Bad status");
         }
 
         await _ordersService.UpdateOrder(order with 
