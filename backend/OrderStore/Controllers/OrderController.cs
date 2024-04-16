@@ -22,10 +22,10 @@ public class OrderController : ControllerBase
         return Ok("test");
     }
 
-    [HttpGet("GetAll")]
-    public async Task<ActionResult<List<Order>>> GetAll()
+    [HttpGet("GetAll/{userId}")]
+    public async Task<ActionResult<List<Order>>> GetAll(string userId)
     {
-        return await _ordersService.GetAllOrders();
+        return await _ordersService.GetAllOrders(userId);
     }
     
     [HttpGet("Get/{id:guid}")]
