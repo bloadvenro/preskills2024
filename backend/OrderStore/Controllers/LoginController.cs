@@ -14,7 +14,9 @@ public class AuthController : ControllerBase
     [HttpPost("login")]
     public Task<ActionResult<LoginResponse>> Login([FromBody] LoginRequest request)
     {
-        var user = Users.Users.SystemUsers.FirstOrDefault(x => x.Login == request.username && x.Password == request.password);
+        var user = Users.Users.SystemUsers.FirstOrDefault(
+            x => x.Login.Equals(request.username, StringComparison.InvariantCultureIgnoreCase)
+              && x.Password.Equals(request.password, StringComparison.InvariantCulture));
 
         if (user == null)
         {

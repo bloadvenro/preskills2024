@@ -26,7 +26,7 @@ public class OrderController : ControllerBase
     public async Task<ActionResult<List<Order>>> GetAll(string userId)
     {
         var user = Users.Users.SystemUsers.FirstOrDefault(x => x.Id == userId);
-        
+
         if (user != null)
             return await _ordersService.GetAllOrders(user.Id, user.Role);
 

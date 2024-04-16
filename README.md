@@ -1,11 +1,11 @@
 
-# RUN
+### RUN
 > docker compose up
 
 > http://localhost:3000
 
 
-# DEBUG
+### DEBUG
 
 > docker-compose up -d --no-deps --build frontend
 
@@ -13,7 +13,7 @@
 
 > docker compose up
 
-# Users:
+### Users
 
 |    Login   |  Password   |    Role   |
 |------------|-------------|-----------|
