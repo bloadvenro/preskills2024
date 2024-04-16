@@ -1,5 +1,8 @@
 using Microsoft.EntityFrameworkCore;
+using OrderStore.Application.Services;
+using OrderStore.Core.Abstractions;
 using OrderStore.DataAccess;
+using OrderStore.DataAccess.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +14,8 @@ builder.Services.AddDbContext<OrderStoreDbContext>(
     {
         options.UseNpgsql(builder.Configuration.GetConnectionString(nameof(OrderStoreDbContext)));
     });
+builder.Services.AddScoped<IOrdersService, OrdersService>();
+builder.Services.AddScoped<IOrdersRepository, OrdersRepository>();
 
 var app = builder.Build();
 
