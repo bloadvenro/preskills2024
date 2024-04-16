@@ -12,7 +12,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<OrderStoreDbContext>(
     options =>
     {
-        options.UseNpgsql(builder.Configuration.GetConnectionString(nameof(OrderStoreDbContext)));
+        options.UseNpgsql(builder.Configuration["ConnectionString"]);
     });
 builder.Services.AddScoped<IOrdersService, OrdersService>();
 builder.Services.AddScoped<IOrdersRepository, OrdersRepository>();

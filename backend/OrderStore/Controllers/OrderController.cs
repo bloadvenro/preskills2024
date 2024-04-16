@@ -34,8 +34,8 @@ public class OrderController : ControllerBase
         return await _ordersService.Get(id);
     }
 
-    [HttpPut("Update")]
-    public async Task<ActionResult<Guid>> Update([FromBody] Guid id, OrderRequest request)
+    [HttpPut("Update/{id:guid}")]
+    public async Task<ActionResult<Guid>> Update(Guid id, [FromBody] OrderRequest request)
     {
         var result = await _ordersService.UpdateOrder(id, request.Name, request.UserId, request.Status, request.EditDate,
             request.Comment, request.FileId);
@@ -44,7 +44,7 @@ public class OrderController : ControllerBase
     }
 
     [HttpPost("Create")]
-    public async Task<ActionResult<Guid>> Create(OrderRequest request)
+    public async Task<ActionResult<Guid>> Create([FromBody] OrderRequest request)
     {
         var order = Order.Create(
             Guid.NewGuid(),
