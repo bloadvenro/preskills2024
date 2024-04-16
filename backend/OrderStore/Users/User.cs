@@ -24,14 +24,14 @@ public static class Users
         },
         new User()
         {
-            Login = "Scientist 1",
+            Login = "Scientist1",
             Password = "Scientist01",
             Id = "1001",
             Role = "scientist"
         },
         new User()
         {
-            Login = "Scientist 2",
+            Login = "Scientist2",
             Password = "Scientist02",
             Id = "1002",
             Role = "scientist"
