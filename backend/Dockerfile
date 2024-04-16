@@ -7,15 +7,15 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["backend/OrderStore/OrderStore.csproj", "backend/OrderStore/"]
-RUN dotnet restore "backend/OrderStore/OrderStore.csproj"
+COPY ["OrderStore/OrderStore.csproj", "OrderStore/"]
+RUN dotnet restore "OrderStore/OrderStore.csproj"
 COPY . .
-WORKDIR "/src/backend/OrderStore"
-RUN dotnet build "OrderStore.csproj" -c $BUILD_CONFIGURATION -o /app/build
+# WORKDIR "/OrderStore"
+RUN dotnet build "./OrderStore/OrderStore.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "OrderStore.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "/OrderStore/OrderStore.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app

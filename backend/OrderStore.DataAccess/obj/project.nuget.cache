@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "f5D4yK0d54yMVQSLoHoxK6DSw53fTc0RaNSwsFpgf/zf4uGm7soieA7vJ0ddLkf5QQW5EFZxyyD/K28tGeXRBQ==",
+  "dgSpecHash": "gfaRKbwfrTvcSYBf3HiBZTcjZrrrgGp12f/r3LiqZP6WPCL/OBpVw1GTzdETjkJE0n3a5z3BHjR1tsOa7MWcWw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Саня\\RiderProjects\\preskills2024\\backend\\OrderStore.DataAccess\\OrderStore.DataAccess.csproj",
+  "projectFilePath": "/Users/dt/src/AS-2024-PreSkills/backend/OrderStore.DataAccess/OrderStore.DataAccess.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }
