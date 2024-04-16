@@ -17,24 +17,24 @@ public static class Users
     {
         new User()
         {
-            Login = "Test",
-            Password = "Test",
-            Id = "id",
-            Role = "role"
+            Login = "Inspector",
+            Password = "Inspector00",
+            Id = "1000",
+            Role = "inspector"
         },
         new User()
         {
-            Login = "",
-            Password = "",
-            Id = "",
-            Role = ""
+            Login = "Scientist 1",
+            Password = "Scientist01",
+            Id = "1001",
+            Role = "scientist"
         },
         new User()
         {
-            Login = "",
-            Password = "",
-            Id = "",
-            Role = ""
+            Login = "Scientist 2",
+            Password = "Scientist02",
+            Id = "1002",
+            Role = "scientist"
         }
     };
 }
