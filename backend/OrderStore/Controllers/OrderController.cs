@@ -28,10 +28,15 @@ public class OrderController : ControllerBase
         return await _ordersService.GetAllOrders();
     }
     
-    [HttpGet("Get")]
-    public async Task<ActionResult<Order>> Get([FromBody] Guid id)
+    [HttpGet("Get/{id:guid}")]
+    public async Task<ActionResult<Order>> Get(Guid id)
     {
-        return await _ordersService.Get(id);
+        var result = await _ordersService.Get(id);
+        
+        if (result == null) 
+            return BadRequest();
+
+        return result;
     }
 
     [HttpPut("Update/{id:guid}")]

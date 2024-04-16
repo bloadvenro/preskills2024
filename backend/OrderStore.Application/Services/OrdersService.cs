@@ -19,10 +19,10 @@ public class OrdersService : IOrdersService
         return await _repository.Get();
     }
     
-    public async Task<Order> Get(Guid id)
+    public async Task<Order?> Get(Guid id)
     {
         var orders = await _repository.Get();
-        return orders.FirstOrDefault(x => x.Id == id)!;
+        return orders.FirstOrDefault(x => x.Id == id);
     }
 
     public async Task<Guid> CreateOrder(Order order)
