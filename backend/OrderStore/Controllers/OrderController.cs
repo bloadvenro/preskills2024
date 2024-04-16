@@ -25,7 +25,7 @@ public class OrderController : ControllerBase
     [HttpGet("GetAll/{userId}")]
     public async Task<ActionResult<List<Order>>> GetAll(string userId)
     {
-        var user = Users.Users.SystemUsers.FirstOrDefault(x => x.Id == userId);
+        var user = Users.Users.GetUser(userId);
 
         if (user != null)
             return await _ordersService.GetAllOrders(user.Id, user.Role);
@@ -54,15 +54,15 @@ public class OrderController : ControllerBase
     // }
 
     [HttpPost("Create")]
-    public async Task<ActionResult<Guid>> Create([FromBody] OrderRequest request)
+    public async Task<ActionResult<Guid>> Create([FromBody] CreateRequest request)
     {
         var order = Order.Create(
             Guid.NewGuid(),
             request.Name,
             request.UserId,
-            request.Status,
-            request.EditDate,
-            request.Comment,
+            (int) Status.Created,
+            DateTime.Now,
+            string.Empty,
             request.FileId
             );
 
@@ -71,8 +71,13 @@ public class OrderController : ControllerBase
     }
 
     [HttpPost("EditOrder")]
-    public async Task<ActionResult<string>> EditOrder([FromBody] EditOrderRequest request)
+    public async Task<ActionResult<EditOrderResponse>> EditOrder([FromBody] EditOrderRequest request)
     {
+        if (!CheckUser(request.userId, Users.User.ScientistRole))
+        {
+            return BadRequest("Bad role");
+        }
+
         var order = await _ordersService.Get(request.orderId);
 
         if (order == null)
@@ -98,5 +103,36 @@ public class OrderController : ControllerBase
         });
 
         return Ok();
+    }
+
+    [HttpPost("Approve")]
+    public async Task<ActionResult<ApproveResponse>> Approve([FromBody] ApproveRequest request)
+    {
+        if (!CheckUser(request.userId, Users.User.ScientistRole))
+        {
+            return BadRequest("Bad role");
+        }
+
+        var order = await _ordersService.Get(request.orderId);
+
+        if (order == null)
+        {
+            return BadRequest("No order");
+        }
+
+        await _ordersService.UpdateOrder(order with 
+        {
+            Status = (int)Status.Sent,
+            EditDate = DateTime.Now,
+        });
+
+        return Ok();
+    }
+
+    private bool CheckUser(string userId, string userRole)
+    {
+        var user = Users.Users.GetUser(userId);
+
+        return user != null || user!.Role.Equals(userRole);
     }
 }

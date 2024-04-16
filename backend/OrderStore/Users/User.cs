@@ -1,3 +1,5 @@
+using System.Reflection.Metadata;
+
 namespace OrderStore.Users;
 
 public class User
@@ -9,6 +11,9 @@ public class User
     public string Id { get; set; }
     
     public string Role { get; set; }
+
+    public static string InspectorRole = "inspector";
+    public static string ScientistRole = "scientist";
 }
 
 public static class Users
@@ -37,4 +42,6 @@ public static class Users
             Role = "scientist"
         }
     };
+
+    public static User? GetUser(string userId) => SystemUsers.FirstOrDefault(x => x.Id == userId);
 }

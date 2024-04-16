@@ -1,8 +1,5 @@
-using Microsoft.EntityFrameworkCore;
 using OrderStore.Core.Abstractions;
-using OrderStore.DataAccess;
-using OrderStore.DataAccess.Entities;
-
+using OrderStore.Core.Models;
 
 namespace OrderStore.Application.Services;
 
@@ -14,7 +11,7 @@ public class ApprovalService // : IApprovalService
     {
         _repository = repository;
     }
-    
+
     public async Task<string> SendToApproval()
     {
         var orders = await _repository.Get();
@@ -25,9 +22,12 @@ public class ApprovalService // : IApprovalService
             return string.Empty;
         }
 
-        var result = await _repository.Update(order.Id, order.Name, order.UserId, 3, DateTime.Now, order.Comment,
-            order.FileId);
-        
+        var result = await _repository.Update(order with 
+        {
+            Status = (int)Status.Sent,
+            EditDate = DateTime.Now,
+        });
+
         return result.ToString();
     }
 }

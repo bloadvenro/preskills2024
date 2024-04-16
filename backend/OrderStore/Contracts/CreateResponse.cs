@@ -1,6 +1,6 @@
 namespace OrderStore.Contracts;
 
-public class OrderResponse
+public class CreateResponse
 {
     
 }
