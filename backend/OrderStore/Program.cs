@@ -17,8 +17,8 @@ builder.Services.AddDbContext<OrderStoreDbContext>(
     });
 builder.Services.AddScoped<IOrdersService, OrdersService>();
 builder.Services.AddScoped<IOrdersRepository, OrdersRepository>();
-//builder.Services.AddScoped<IApprovalService, ApprovalService>();
-//builder.Services.AddHostedService<BackgroundApprovalService>();
+builder.Services.AddScoped<IApprovalService, ApprovalService>();
+builder.Services.AddHostedService<BackgroundApprovalService>();
 
 var app = builder.Build();
 
