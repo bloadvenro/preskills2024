@@ -43,6 +43,11 @@ public static class Users
             FullName = "Bryan Sanford",
             Id = "2001",
             Role = "scientist"
+
+
+
+
+            
         },
         new User()
         {

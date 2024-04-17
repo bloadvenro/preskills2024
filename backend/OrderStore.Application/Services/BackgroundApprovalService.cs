@@ -19,6 +19,8 @@ public class BackgroundApprovalService : BackgroundService
         _serviceProvider = serviceProvider;
         _fileConfigOptions = new FileConfigOptions();
         _intervals = LoadJson(_fileConfigOptions.FilePath).ToList();
+
+        Thread.Sleep(TimeSpan.FromSeconds(20));
     } 
 
     private IEnumerable<Interval> LoadJson(string filePath)
