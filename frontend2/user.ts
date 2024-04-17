@@ -18,7 +18,6 @@ export const useUser = () => {
   const cb = useCallback(() => {
     const user = getUser();
     setUser(user);
-    console.log("cb", user);
   }, []);
 
   if (!proxifiedLS) {
@@ -43,7 +42,6 @@ const profixyLS = () => {
           newValue: argumentList[1],
         },
       });
-      console.log("setItem");
       const res = Reflect.apply(target, thisArg, argumentList);
       window.dispatchEvent(event);
       return res;
@@ -57,7 +55,6 @@ const profixyLS = () => {
           key: argumentList[0],
         },
       });
-      console.log("removeItem");
       const res = Reflect.apply(target, thisArg, argumentList);
       window.dispatchEvent(event);
       return res;

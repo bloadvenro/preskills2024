@@ -25,6 +25,7 @@ const tagMap = {
 
 interface DataType {
   key: React.Key;
+  id: string;
   name: string;
   scientist: string;
   modifiedAt: Date;
@@ -34,6 +35,7 @@ interface DataType {
 
 const data: DataType[] = Array.from({ length: 30 }).map((_, i) => ({
   key: i.toString(),
+  id: faker.datatype.uuid(),
   name: faker.commerce.productDescription(),
   scientist: faker.person.fullName(),
   modifiedAt: faker.date.anytime(),
@@ -45,8 +47,8 @@ const columns: TableColumnsType<DataType> = [
   {
     title: "Report name",
     dataIndex: "name",
-    render: (value) => (
-      <Link href="/reports/1">
+    render: (value, record) => (
+      <Link href={`/reports/${record.id}`}>
         <Button
           type="link"
           style={{
@@ -154,31 +156,36 @@ const Reports: React.FC = () => {
   const [reports, setReports] = useState([]);
 
   useEffect(() => {
+    if (!user) return;
+
     (async () => {
       const response = await fetch(`http://localhost:5002/order/getall/${user.id}`);
 
       if (!response.ok) {
-        return;
+        return alert("Error, please retry");
       }
 
       const result = await response.json();
 
       setReports(result);
     })();
-  }, [user.id]);
+  }, [user?.id]);
 
   return (
     <Table
       tableLayout="fixed"
       columns={columns}
-      dataSource={reports.map((report: any) => ({
-        id: report.id,
-        name: report.name,
-        scientist: `${faker.person.fullName()} (${report.userId})`,
-        modifiedAt: new Date(Date.parse(report.editDate)),
-        status: report.status,
-        actions: ["1", "2"],
-      }))}
+      dataSource={
+        reports.map((report: any) => ({
+          id: report.id,
+          name: report.name,
+          // scientist: `${faker.person.fullName()} (${report.userId})`,
+          scientist: report.userId,
+          modifiedAt: new Date(Date.parse(report.editDate)),
+          status: report.status,
+          actions: ["1", "2"],
+        })) as any
+      }
       onChange={onChange}
       className="w-full"
     />

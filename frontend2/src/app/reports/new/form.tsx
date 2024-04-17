@@ -151,7 +151,7 @@ export default function ReportForm() {
                   </>
                 )}
               </div>
-              <Space align="end">
+              <Space direction="vertical" className="w-full">
                 <SubmitButton />
                 <CancelButton />
               </Space>
@@ -181,8 +181,10 @@ function SubmitButton() {
 
 function CancelButton() {
   return (
-    <Link href="/reports">
-      <Button type="default">Cancel</Button>;
+    <Link href="/reports" className="w-full">
+      <Button type="link" className="w-full">
+        Back to reports
+      </Button>
     </Link>
   );
 }

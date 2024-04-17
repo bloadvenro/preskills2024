@@ -8,6 +8,7 @@ import { useFormState, useFormStatus } from "react-dom";
 import { InboxOutlined } from "@ant-design/icons";
 import type { UploadProps } from "antd";
 import { message, Upload } from "antd";
+import Link from "next/link";
 
 const { Dragger } = Upload;
 
@@ -59,8 +60,11 @@ const onFormStateChange = (prevState: FormState, formData: FormData): FormState 
   };
 };
 
-export default function ReportEditForm() {
-  const [state, action] = useFormState(onFormStateChange, initialState);
+export default function ReportEditForm({ data }: any) {
+  const [state, action] = useFormState(onFormStateChange, {
+    ...initialState,
+    values: { ...initialState.values, ...data },
+  } as any);
 
   return (
     <Row justify="center" align="middle" className="min-h-screen">
@@ -109,7 +113,10 @@ export default function ReportEditForm() {
             </Form.Item>
 
             <Form.Item>
-              <SubmitButton />
+              <Space direction="vertical" className="w-full">
+                <SubmitButton />
+                <CancelButton />
+              </Space>
               <div className="flex h-8 items-end space-x-1" aria-live="polite" aria-atomic="true">
                 {false && (
                   <>
@@ -139,5 +146,15 @@ function SubmitButton() {
     >
       Proceed
     </Button>
+  );
+}
+
+function CancelButton() {
+  return (
+    <Link href="/reports" className="w-full">
+      <Button type="link" className="w-full">
+        Back to reports
+      </Button>
+    </Link>
   );
 }

@@ -1,7 +1,11 @@
 import { NextPage } from "next";
+import ReportView from "./view";
 
-const ReportEditPage: NextPage = () => {
-  return <div>View report</div>;
+const ReportViewPage: NextPage = async ({ params }: any) => {
+  const response = await fetch(`http://localhost:5002/order/get/${params.reportId}`);
+  const data = await response.json();
+
+  return <ReportView data={Object.entries(data)} />;
 };
 
-export default ReportEditPage;
+export default ReportViewPage;
