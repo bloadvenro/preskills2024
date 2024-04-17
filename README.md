@@ -16,9 +16,9 @@
 
 ### DEBUG
 
-> docker-compose up -d --no-deps --build frontend
+> docker compose up -d --no-deps --build frontend
 
-> docker-compose up -d --no-deps --build backend
+> docker compose up -d --no-deps --build backend
 
 > docker compose up
 

@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using OrderStore.Core.Abstractions;
@@ -17,14 +18,39 @@ public class BackgroundApprovalService : BackgroundService
     {
         _serviceProvider = serviceProvider;
         _fileConfigOptions = new FileConfigOptions();
-        _intervals = LoadJson(_fileConfigOptions.FilePath);
+        _intervals = LoadJson(_fileConfigOptions.FilePath).ToList();
     } 
 
-    private List<Interval> LoadJson(string filePath)
+    private IEnumerable<Interval> LoadJson(string filePath)
     {
+        DateTime? from = null, to = null;
+
         using StreamReader r = new StreamReader(filePath);
-        string json = r.ReadToEnd();
-        return JsonSerializer.Deserialize<List<Interval>>(json)!;
+        var line = r.ReadLine();
+
+        while (line != null)
+        {
+            if (line.Contains("from"))
+            {
+                var s = line.Split("\"")[3];
+                from = DateTime.ParseExact(s, "yyyy-dd-MM HH:mm:ss", null);
+            }
+
+            if (line.Contains("to"))
+            {
+                var s = line.Split("\"")[3];
+                to = DateTime.ParseExact(s, "yyyy-dd-MM HH:mm:ss", null);
+            }
+
+            if (from.HasValue && to.HasValue)
+            {
+                yield return new Interval { From = from.Value, To = to.Value };
+                from = null;
+                to = null;
+            }
+
+            line = r.ReadLine();
+        }
     }
 
     protected override async Task ExecuteAsync(CancellationToken cancellationToken) 
@@ -52,4 +78,21 @@ public class BackgroundApprovalService : BackgroundService
             _lastSendTime = await approvalService.SendToApproval();
         }
     } 
+}
+
+public class CustomDateTimeConverter : JsonConverter<DateTime>
+{
+	private readonly string Format;
+	public CustomDateTimeConverter(string format)
+	{
+		Format = format;
+	}
+	public override void Write(Utf8JsonWriter writer, DateTime date, JsonSerializerOptions options)
+	{
+		writer.WriteStringValue(date.ToString(Format));
+	}
+	public override DateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+	{
+		return DateTime.ParseExact(reader.GetString(), Format, null);
+	}
 }
