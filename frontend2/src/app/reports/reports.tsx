@@ -79,14 +79,20 @@ const columns: TableColumnsType<DataType> = [
   {
     title: "Status",
     dataIndex: "status",
-    defaultFilteredValue: [ReportStatus.Created, ReportStatus.Approved, ReportStatus.Rejected],
-    filters: Array.from(new Set(data.map((record) => record.status))).map((status) => ({
-      value: status,
-      text: ReportStatus[status],
-    })),
+    defaultFilteredValue: [
+      ReportStatus.Created.toString(),
+      ReportStatus.Approved.toString(),
+      ReportStatus.Rejected.toString(),
+    ],
+    filters: Array.from(new Set(data.map((record) => record.status)))
+      .sort()
+      .map((status) => ({
+        value: status.toString(),
+        text: `${ReportStatus[status]} ${status}`,
+      })),
     filterMode: "tree",
     filterSearch: true,
-    onFilter: (value, record) => record.status === value,
+    onFilter: (value, record) => record.status.toString() === value.toString(),
     render: (value: ReportStatus) => tagMap[value],
     sorter: (a, b) => a.status - b.status,
     width: "10%",

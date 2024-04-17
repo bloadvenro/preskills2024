@@ -1,8 +1,7 @@
 import { NextPage } from "next";
-import SignInForm from "./form";
 
-const LoginPage: NextPage = () => {
-  return <SignInForm />;
+const IndexPage: NextPage = () => {
+  return null;
 };
 
-export default LoginPage;
+export default IndexPage;

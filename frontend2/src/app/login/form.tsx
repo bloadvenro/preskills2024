@@ -3,7 +3,9 @@
 import { LockOutlined, UserOutlined, ExclamationCircleOutlined } from "@ant-design/icons";
 
 import { Form, Input, Button, Col, Row, Typography } from "antd";
+import { useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
+import { useRouter } from "next/navigation";
 
 const initialValues = {
   username: "",
@@ -33,6 +35,8 @@ const onFormStateChange = (prevState: FormState, formData: FormData): FormState 
 
 export default function SignInForm() {
   const [state, action] = useFormState(onFormStateChange, initialState);
+  const [formError, setFormError] = useState("");
+  const router = useRouter();
 
   return (
     <Row justify="center" align="middle" className="min-h-screen">
@@ -44,6 +48,8 @@ export default function SignInForm() {
           initialValues={state.values}
           action={action}
           onFinish={async (values) => {
+            setFormError("");
+
             const response = await fetch("http://localhost:5002/auth/login", {
               method: "POST", // *GET, POST, PUT, DELETE, etc.
               mode: "cors", // no-cors, *cors, same-origin
@@ -55,7 +61,14 @@ export default function SignInForm() {
               body: JSON.stringify(values), // body data type must match "Content-Type" header
             });
 
-            const result = response.json();
+            const result = await response.json();
+
+            if (!response.ok) {
+              setFormError("Invalid username or password");
+              return;
+            }
+
+            localStorage.setItem("user", JSON.stringify(result));
           }}
           onFinishFailed={() => console.log("PPC")}
         >
@@ -92,10 +105,10 @@ export default function SignInForm() {
           <Form.Item>
             <LoginButton />
             <div className="flex h-8 items-end space-x-1" aria-live="polite" aria-atomic="true">
-              {false && (
+              {formError && (
                 <>
                   <ExclamationCircleOutlined className="h-5 w-5 text-red-500" />
-                  <p className="text-sm text-red-500">{"err msg not implemented"}</p>
+                  <p className="text-sm text-red-500">{formError}</p>
                 </>
               )}
             </div>
@@ -117,7 +130,7 @@ function LoginButton() {
       htmlType="submit"
       type="primary"
     >
-      log in
+      Log in
     </Button>
   );
 }
