@@ -89,7 +89,7 @@ export default function ReportForm() {
               redirect: "follow", // manual, *follow, error
               referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
               body: JSON.stringify({
-                userId: user.id,
+                userId: user?.id,
                 fileId: 0,
                 ...values,
                 // request: { ...values, userId: user.id, fileId: "no-file-yet", request: {} },
@@ -125,12 +125,12 @@ export default function ReportForm() {
               label="Attachment"
               rules={[
                 {
-                  required: true,
-                  message: "please input your password!",
+                  required: false,
+                  message: "please add your attachment!",
                 },
               ]}
             >
-              <Dragger {...props}>
+              <Dragger {...props} disabled>
                 <p className="ant-upload-drag-icon">
                   <InboxOutlined />
                 </p>

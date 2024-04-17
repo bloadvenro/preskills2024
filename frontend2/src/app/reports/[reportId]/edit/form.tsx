@@ -9,6 +9,8 @@ import { InboxOutlined } from "@ant-design/icons";
 import type { UploadProps } from "antd";
 import { message, Upload } from "antd";
 import Link from "next/link";
+import { useUser } from "../../../../../user";
+import { useRouter } from "next/navigation";
 
 const { Dragger } = Upload;
 
@@ -65,6 +67,8 @@ export default function ReportEditForm({ data }: any) {
     ...initialState,
     values: { ...initialState.values, ...data },
   } as any);
+  const user = useUser();
+  const router = useRouter();
 
   return (
     <Row justify="center" align="middle" className="min-h-screen">
@@ -74,7 +78,32 @@ export default function ReportEditForm({ data }: any) {
           layout="vertical"
           initialValues={state.values}
           action={action}
-          onFinish={(values) => console.log("YAY", values)}
+          onFinish={async (values) => {
+            const response = await fetch("http://localhost:5002/order/editOrder", {
+              method: "POST", // *GET, POST, PUT, DELETE, etc.
+              mode: "cors", // no-cors, *cors, same-origin
+              cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+              credentials: "same-origin", // include, *same-origin, omit
+              headers: new Headers([["Content-Type", "application/json"]]),
+              redirect: "follow", // manual, *follow, error
+              referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+              body: JSON.stringify({
+                userId: user?.id,
+                orderId: data.id,
+                fileId: 0,
+                ...values,
+                // request: { ...values, userId: user.id, fileId: "no-file-yet", request: {} },
+              }), // body data type must match "Content-Type" header
+            });
+
+            if (!response.ok) {
+              return;
+            }
+
+            // const result = await response.json();
+
+            router.push("/reports");
+          }}
           onFinishFailed={() => console.log("PPC")}
         >
           <Space direction="vertical" size="middle">
@@ -95,12 +124,12 @@ export default function ReportEditForm({ data }: any) {
               label="Attachment"
               rules={[
                 {
-                  required: true,
-                  message: "please input your password!",
+                  required: false,
+                  message: "please add an attachment!",
                 },
               ]}
             >
-              <Dragger {...props}>
+              <Dragger {...props} disabled>
                 <p className="ant-upload-drag-icon">
                   <InboxOutlined />
                 </p>

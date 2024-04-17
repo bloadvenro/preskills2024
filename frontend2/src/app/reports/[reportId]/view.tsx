@@ -1,8 +1,12 @@
 "use client";
 
-import { Button, Col, Flex, Row, Space, Typography } from "antd";
+import { Button, Col, Flex, Modal, Row, Space, Typography } from "antd";
 import { NextPage } from "next";
 import { useRouter } from "next/navigation";
+import { useUser } from "../../../../user";
+import Link from "next/link";
+import { useState } from "react";
+import TextArea from "antd/es/input/TextArea";
 
 const getKeyLabel = (key: string) => {
   switch (key) {
@@ -83,8 +87,48 @@ const getValue = (key: string, value: any) => {
   }
 };
 
-const ReportView: NextPage<any> = ({ data }: any) => {
+const ReportView = ({ data, reportId }: any) => {
   const router = useRouter();
+  const user = useUser();
+  const list = Object.entries(data);
+  const [rejectionComment, setRejectionComment] = useState("");
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleOk = async () => {
+    const response = await fetch("http://localhost:5002/order/reject", {
+      method: "POST", // *GET, POST, PUT, DELETE, etc.
+      mode: "cors", // no-cors, *cors, same-origin
+      cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+      credentials: "same-origin", // include, *same-origin, omit
+      headers: new Headers([["Content-Type", "application/json"]]),
+      redirect: "follow", // manual, *follow, error
+      referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+      body: JSON.stringify({
+        userId: user?.id,
+        orderId: data.id,
+        comment: rejectionComment,
+        // request: { ...values, userId: user.id, fileId: "no-file-yet", request: {} },
+      }), // body data type must match "Content-Type" header
+    });
+
+    if (!response.ok) {
+      return;
+    }
+
+    // const result = await response.json();
+
+    setIsModalOpen(false);
+    router.push("/reports");
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
 
   return (
     <>
@@ -93,9 +137,8 @@ const ReportView: NextPage<any> = ({ data }: any) => {
           <Typography.Title>Report summary</Typography.Title>
         </Col>
       </Row>
-
       <ul style={{ marginTop: "20px" }}>
-        {data.map(([key, value]: any) => {
+        {list.map(([key, value]: any) => {
           return (
             <li key={key} style={{ marginBottom: "2em" }}>
               <Row>
@@ -110,21 +153,75 @@ const ReportView: NextPage<any> = ({ data }: any) => {
           );
         })}
       </ul>
-
       <Row style={{ marginTop: "40px" }} justify="start">
         <Col offset={6} span={12}>
           <Flex justify="space-between">
             <Space>
-              <Button type="primary">Edit</Button>
-              <Button type="primary">Approve</Button>
-              <Button danger>Reject</Button>
+              {user?.role === "scientist" ? (
+                <Link href={`/reports/${reportId}/edit`}>
+                  <Button
+                    type="primary"
+                    disabled={![ReportStatus.Created, ReportStatus.Rejected].includes(data.status)}
+                  >
+                    Edit
+                  </Button>
+                </Link>
+              ) : null}
+              {user?.role === "inspector" ? (
+                <Button
+                  type="primary"
+                  disabled={data.status !== ReportStatus.Created}
+                  onClick={async () => {
+                    const response = await fetch("http://localhost:5002/order/approve", {
+                      method: "POST", // *GET, POST, PUT, DELETE, etc.
+                      mode: "cors", // no-cors, *cors, same-origin
+                      cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+                      credentials: "same-origin", // include, *same-origin, omit
+                      headers: new Headers([["Content-Type", "application/json"]]),
+                      redirect: "follow", // manual, *follow, error
+                      referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+                      body: JSON.stringify({
+                        userId: user?.id,
+                        orderId: data.id,
+                        // request: { ...values, userId: user.id, fileId: "no-file-yet", request: {} },
+                      }), // body data type must match "Content-Type" header
+                    });
+
+                    if (!response.ok) {
+                      return;
+                    }
+
+                    // const result = await response.json();
+
+                    router.push("/reports");
+                  }}
+                >
+                  Approve
+                </Button>
+              ) : null}
+              {user?.role === "inspector" ? (
+                <Button danger onClick={showModal}>
+                  Reject
+                </Button>
+              ) : null}
             </Space>
             <Button type="link" onClick={() => router.push("/reports")}>
               Back to reports
             </Button>
           </Flex>
         </Col>
-      </Row>
+      </Row>{" "}
+      <Modal
+        title="Enter rejection comment"
+        open={isModalOpen}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        okButtonProps={{
+          disabled: !rejectionComment.length,
+        }}
+      >
+        <TextArea onChange={(e) => setRejectionComment(e.target.value)} value={rejectionComment} />
+      </Modal>
     </>
   );
 };

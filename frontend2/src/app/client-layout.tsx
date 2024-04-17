@@ -51,11 +51,11 @@ const ClientLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => 
                   items={items}
                   style={{ flex: 1, minWidth: 0 }}
                 />
-                {pathname === "/reports/new" ? null : (
+                {user?.role === "scientist" ? (
                   <Link href="/reports/new">
                     <Button type="primary">New report</Button>
                   </Link>
-                )}
+                ) : null}
               </div>
               <Dropdown
                 menu={{

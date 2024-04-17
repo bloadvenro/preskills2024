@@ -65,7 +65,7 @@ const columns: TableColumnsType<DataType> = [
   {
     title: "Scientist name",
     dataIndex: "scientist",
-    filters: data.map((record) => ({ value: record.scientist, text: record.scientist })),
+    // filters: data.map((record) => ({ value: record.scientist, text: record.scientist })),
     filterMode: "tree",
     filterSearch: true,
     onFilter: (value, record) => record.scientist.startsWith(value as string),
@@ -171,21 +171,30 @@ const Reports: React.FC = () => {
     })();
   }, [user?.id]);
 
+  const sc = columns.find((c) => (c as any).dataIndex === "scientist") as any;
+
+  const ds = reports.map((report: any) => ({
+    id: report.id,
+    name: report.name,
+    // scientist: `${faker.person.fullName()} (${report.userId})`,
+    scientist: report.userId,
+    modifiedAt: new Date(Date.parse(report.editDate)),
+    status: report.status,
+    actions: ["1", "2"],
+  })) as any;
+
+  sc.filters = Array.from(new Set(ds.map((record: any) => record.scientist)))
+    .sort()
+    .map((scientist) => ({
+      value: scientist,
+      text: scientist,
+    }));
+
   return (
     <Table
       tableLayout="fixed"
       columns={columns}
-      dataSource={
-        reports.map((report: any) => ({
-          id: report.id,
-          name: report.name,
-          // scientist: `${faker.person.fullName()} (${report.userId})`,
-          scientist: report.userId,
-          modifiedAt: new Date(Date.parse(report.editDate)),
-          status: report.status,
-          actions: ["1", "2"],
-        })) as any
-      }
+      dataSource={ds}
       onChange={onChange}
       className="w-full"
     />
