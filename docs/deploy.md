@@ -1,9 +1,6 @@
 
 ### Deploy
 
-Ensure dotnet installed
-> apt-get install dotnet
-
 Ensure docker installed
 > apt-get install docker
 
