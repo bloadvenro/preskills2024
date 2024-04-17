@@ -27,7 +27,7 @@
 |    Login   |  Password   |    Role   |
 |------------|-------------|-----------|
 | Inspector0 | Inspector00 | inspector |
-| Inspector1 | Inspector00 | inspector |
+| Inspector1 | Inspector01 | inspector |
 | Scientist1 | Scientist01 | scientist |
 | Scientist2 | Scientist02 | scientist |
 
