@@ -15,7 +15,7 @@ public class ApprovalService  : IApprovalService
     public async Task<DateTime?> SendToApproval()
     {
         var orders = await _repository.Get();
-        var order = orders.OrderBy(x => x.EditDate).FirstOrDefault(x => x.Status == 1);
+        var order = orders.OrderBy(x => x.EditDate).FirstOrDefault(x => x.Status == (int)Status.Approved);
 
         if (order == null)
         {

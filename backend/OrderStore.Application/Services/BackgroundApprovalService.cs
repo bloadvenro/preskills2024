@@ -58,7 +58,7 @@ public class BackgroundApprovalService : BackgroundService
         while (!cancellationToken.IsCancellationRequested) 
         { 
             await SendAsync(cancellationToken);
-            await Task.Delay(TimeSpan.FromSeconds(2), cancellationToken).ConfigureAwait(false);
+            await Task.Delay(TimeSpan.FromSeconds(5), cancellationToken).ConfigureAwait(false);
         } 
     } 
  
