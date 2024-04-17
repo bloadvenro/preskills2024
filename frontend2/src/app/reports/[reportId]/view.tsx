@@ -2,6 +2,7 @@
 
 import { Button, Col, Flex, Row, Space, Typography } from "antd";
 import { NextPage } from "next";
+import { useRouter } from "next/navigation";
 
 const getKeyLabel = (key: string) => {
   switch (key) {
@@ -82,7 +83,9 @@ const getValue = (key: string, value: any) => {
   }
 };
 
-const ReportView: NextPage = ({ data }: any) => {
+const ReportView: NextPage<any> = ({ data }: any) => {
+  const router = useRouter();
+
   return (
     <>
       <Row>
@@ -116,7 +119,9 @@ const ReportView: NextPage = ({ data }: any) => {
               <Button type="primary">Approve</Button>
               <Button danger>Reject</Button>
             </Space>
-            <Button type="link">Back to reports</Button>
+            <Button type="link" onClick={() => router.push("/reports")}>
+              Back to reports
+            </Button>
           </Flex>
         </Col>
       </Row>
