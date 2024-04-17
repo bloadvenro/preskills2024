@@ -29,14 +29,17 @@
       <Content Include="..\..\.dockerignore">
         <Link>.dockerignore</Link>
       </Content>
-      <Content Update="config.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\OrderStore.Application\OrderStore.Application.csproj" />
       <ProjectReference Include="..\OrderStore.DataAccess\OrderStore.DataAccess.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Include="config.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>
