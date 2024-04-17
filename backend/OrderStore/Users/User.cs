@@ -5,6 +5,8 @@ public class User
     public string Login { get; set; }
     
     public string Password { get; set; }
+
+    public string FullName { get; set; }
     
     public string Id { get; set; }
     
@@ -22,6 +24,7 @@ public static class Users
         {
             Login = "Inspector0",
             Password = "Inspector00",
+            FullName = "Marguerite Brown Sr.",
             Id = "1000",
             Role = "inspector"
         },
@@ -29,6 +32,7 @@ public static class Users
         {
             Login = "Inspector1",
             Password = "Inspector01",
+            FullName = "Salvatore Baumbach",
             Id = "1001",
             Role = "inspector"
         },
@@ -36,6 +40,7 @@ public static class Users
         {
             Login = "Scientist1",
             Password = "Scientist01",
+            FullName = "Bryan Sanford",
             Id = "2001",
             Role = "scientist"
         },
@@ -43,6 +48,7 @@ public static class Users
         {
             Login = "Scientist2",
             Password = "Scientist02",
+            FullName = "Silvia Jakubowski",
             Id = "2002",
             Role = "scientist"
         }
