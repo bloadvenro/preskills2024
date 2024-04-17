@@ -4,9 +4,10 @@ import React from "react";
 import { Avatar, Breadcrumb, Button, Dropdown, Flex, Layout, Menu, theme } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 import { logout, useUser } from "../../user";
-import { useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { AuthGuard } from "../../auth-guard";
 import dynamic from "next/dynamic";
+import Link from "next/link";
 
 const { Header, Content, Footer } = Layout;
 
@@ -21,6 +22,8 @@ const ClientLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => 
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
+
+  const pathname = usePathname();
 
   const user = useUser();
 
@@ -48,6 +51,11 @@ const ClientLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => 
                   items={items}
                   style={{ flex: 1, minWidth: 0 }}
                 />
+                {pathname === "/reports/new" ? null : (
+                  <Link href="/reports/new">
+                    <Button type="primary">New report</Button>
+                  </Link>
+                )}
               </div>
               <Dropdown
                 menu={{

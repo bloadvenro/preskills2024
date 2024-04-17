@@ -61,12 +61,12 @@ export default function SignInForm() {
               body: JSON.stringify(values), // body data type must match "Content-Type" header
             });
 
-            const result = await response.json();
-
             if (!response.ok) {
               setFormError("Invalid username or password");
               return;
             }
+
+            const result = await response.json();
 
             localStorage.setItem("user", JSON.stringify(result));
           }}

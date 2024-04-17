@@ -1,12 +1,13 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Space, Table, Tag } from "antd";
 import type { TableColumnsType, TableProps } from "antd";
 import { green, red } from "@ant-design/colors";
 import { faker } from "@faker-js/faker";
 import { CloseOutlined, EditTwoTone, CheckOutlined } from "@ant-design/icons";
 import Link from "next/link";
+import { useUser } from "../../../user";
 
 enum ReportStatus {
   Created, // 0
@@ -73,7 +74,7 @@ const columns: TableColumnsType<DataType> = [
     dataIndex: "modifiedAt",
     defaultSortOrder: "descend",
     sorter: (a, b) => +a.modifiedAt - +b.modifiedAt,
-    render: (date) => date.toLocaleDateString(),
+    render: (date) => date.toLocaleString(),
     width: "15%",
   },
   {
@@ -148,14 +149,40 @@ const onChange: TableProps<DataType>["onChange"] = (pagination, filters, sorter,
   console.log("params", pagination, filters, sorter, extra);
 };
 
-const Reports: React.FC = () => (
-  <Table
-    tableLayout="fixed"
-    columns={columns}
-    dataSource={data}
-    onChange={onChange}
-    className="w-full"
-  />
-);
+const Reports: React.FC = () => {
+  const user = useUser();
+  const [reports, setReports] = useState([]);
+
+  useEffect(() => {
+    (async () => {
+      const response = await fetch(`http://localhost:5002/order/getall/${user.id}`);
+
+      if (!response.ok) {
+        return;
+      }
+
+      const result = await response.json();
+
+      setReports(result);
+    })();
+  }, [user.id]);
+
+  return (
+    <Table
+      tableLayout="fixed"
+      columns={columns}
+      dataSource={reports.map((report: any) => ({
+        id: report.id,
+        name: report.name,
+        scientist: `${faker.person.fullName()} (${report.userId})`,
+        modifiedAt: new Date(Date.parse(report.editDate)),
+        status: report.status,
+        actions: ["1", "2"],
+      }))}
+      onChange={onChange}
+      className="w-full"
+    />
+  );
+};
 
 export default Reports;

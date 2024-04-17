@@ -8,6 +8,10 @@ import { useFormState, useFormStatus } from "react-dom";
 import { InboxOutlined } from "@ant-design/icons";
 import type { UploadProps } from "antd";
 import { message, Upload } from "antd";
+import { useUser } from "../../../../user";
+import { useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const { Dragger } = Upload;
 
@@ -61,6 +65,9 @@ const onFormStateChange = (prevState: FormState, formData: FormData): FormState 
 
 export default function ReportForm() {
   const [state, action] = useFormState(onFormStateChange, initialState);
+  const [formError, setFormError] = useState("");
+  const user = useUser();
+  const router = useRouter();
 
   return (
     <Row justify="center" align="middle" className="min-h-screen">
@@ -70,7 +77,34 @@ export default function ReportForm() {
           layout="vertical"
           initialValues={state.values}
           action={action}
-          onFinish={(values) => console.log("YAY", values)}
+          onFinish={async (values) => {
+            setFormError("");
+
+            const response = await fetch("http://localhost:5002/order/create", {
+              method: "POST", // *GET, POST, PUT, DELETE, etc.
+              mode: "cors", // no-cors, *cors, same-origin
+              cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+              credentials: "same-origin", // include, *same-origin, omit
+              headers: new Headers([["Content-Type", "application/json"]]),
+              redirect: "follow", // manual, *follow, error
+              referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+              body: JSON.stringify({
+                userId: user.id,
+                fileId: 0,
+                ...values,
+                // request: { ...values, userId: user.id, fileId: "no-file-yet", request: {} },
+              }), // body data type must match "Content-Type" header
+            });
+
+            if (!response.ok) {
+              setFormError(await response.text());
+              return;
+            }
+
+            // const result = await response.json();
+
+            router.push("/reports");
+          }}
           onFinishFailed={() => console.log("PPC")}
         >
           <Space direction="vertical" size="middle">
@@ -146,5 +180,9 @@ function SubmitButton() {
 }
 
 function CancelButton() {
-  return <Button type="default">Cancel</Button>;
+  return (
+    <Link href="/reports">
+      <Button type="default">Cancel</Button>;
+    </Link>
+  );
 }
