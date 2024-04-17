@@ -91,7 +91,8 @@ const columns: TableColumnsType<DataType> = [
       .sort()
       .map((status) => ({
         value: status.toString(),
-        text: `${ReportStatus[status]} ${status}`,
+        // text: `${ReportStatus[status]} ${status}`,
+        text: `${ReportStatus[status]}`,
       })),
     filterMode: "tree",
     filterSearch: true,
@@ -100,51 +101,51 @@ const columns: TableColumnsType<DataType> = [
     sorter: (a, b) => a.status - b.status,
     width: "10%",
   },
-  {
-    width: "10%",
-    title: "Actions",
-    dataIndex: "actions",
-    render: (availableActions) => {
-      const actions = [
-        {
-          name: "1",
-          icon: (
-            <CheckOutlined
-              style={{ color: green[4] }}
-              onClick={() => alert("APPROVED")}
-              title="Approve"
-            />
-          ),
-        },
-        {
-          name: "1",
-          icon: (
-            <CloseOutlined
-              style={{ color: red[3] }}
-              onClick={() => alert("REJECTED")}
-              title="Reject"
-            />
-          ),
-        },
-        {
-          name: "2",
-          icon: (
-            <Link href={`/report/1`}>
-              <EditTwoTone title="Edit" />
-            </Link>
-          ),
-        },
-      ].filter((action) => availableActions.find((name: string) => name === action.name));
+  // {
+  //   width: "10%",
+  //   title: "Actions",
+  //   dataIndex: "actions",
+  //   render: (availableActions) => {
+  //     const actions = [
+  //       {
+  //         name: "1",
+  //         icon: (
+  //           <CheckOutlined
+  //             style={{ color: green[4] }}
+  //             onClick={() => alert("APPROVED")}
+  //             title="Approve"
+  //           />
+  //         ),
+  //       },
+  //       {
+  //         name: "1",
+  //         icon: (
+  //           <CloseOutlined
+  //             style={{ color: red[3] }}
+  //             onClick={() => alert("REJECTED")}
+  //             title="Reject"
+  //           />
+  //         ),
+  //       },
+  //       {
+  //         name: "2",
+  //         icon: (
+  //           <Link href={`/report/1`}>
+  //             <EditTwoTone title="Edit" />
+  //           </Link>
+  //         ),
+  //       },
+  //     ].filter((action) => availableActions.find((name: string) => name === action.name));
 
-      return (
-        <Space size="large" style={{ fontSize: "1.32em" }}>
-          {actions.map((action, i) => (
-            <div key={i}>{action.icon}</div>
-          ))}
-        </Space>
-      );
-    },
-  },
+  //     return (
+  //       <Space size="large" style={{ fontSize: "1.32em" }}>
+  //         {actions.map((action, i) => (
+  //           <div key={i}>{action.icon}</div>
+  //         ))}
+  //       </Space>
+  //     );
+  //   },
+  // },
 ];
 
 const onChange: TableProps<DataType>["onChange"] = (pagination, filters, sorter, extra) => {
